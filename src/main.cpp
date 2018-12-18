@@ -4,8 +4,20 @@
 
 using namespace std;
 
+bool hit_sphere(const Vec3& center, double radius, const Ray& r)
+{
+    Vec3 oc = r.origin() - center;
+    double a = dot(r.direction(), r.direction());
+    double b = 2. * dot(oc, r.direction());
+    double c = dot(oc, oc) - radius*radius;
+    double discriminant = b*b - 4.*a*c;
+    return discriminant > 0;
+}
+
 Vec3 color(const Ray& r)
 {
+    if(hit_sphere(Vec3(0.,0.,-1.), 0.5, r))
+        return Vec3(1.,0.,0.);
     Vec3 unit_direction = getUnitVectorOf(r.direction());
     double t = 0.5 * (unit_direction.y() + 1.);
     return (1. - t) * Vec3(1., 1., 1.) + t * Vec3(0.5, 0.7, 1.);

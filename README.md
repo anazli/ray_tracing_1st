@@ -1,2 +1,6 @@
 # ray_tracing_1st
-A ray tracer in C++ based on the excelent introductory books of Peter Shirley. 
+A third re-implementation of a ray tracer in C++ based on the excelent
+introductory book of Peter Shirley, **Ray tracing in one weekend**.
+
+Currently:
+![Alt text](image.ppm?raw=true "Result")
