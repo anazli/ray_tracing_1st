@@ -28,7 +28,7 @@ int main()
     int nx = 800;
     int ny = 600;
     ofstream out;
-    out.open("picture.ppm");
+    out.open("image.ppm");
 
     Vec3 lower_left_corner(-2., -1., -1.);
     Vec3 horizontal(4., 0., 0.);
