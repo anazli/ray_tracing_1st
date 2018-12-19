@@ -3,4 +3,4 @@ A third re-implementation of a ray tracer in C++ based on the excelent
 introductory book of Peter Shirley, **Ray tracing in one weekend**.
 
 Currently:
-![image](https://github.com/anazli/ray_tracing_1st/image.ppm)
+![image](./image.ppm)
