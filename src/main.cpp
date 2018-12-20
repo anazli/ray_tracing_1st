@@ -11,9 +11,10 @@ using namespace std;
 Vec3 color(const Ray& r, Hitable *world)
 {
     hit_record rec;
-    if(world->hit(r, 0., MAXFLOAT, rec))
+    if(world->hit(r, 0.001, MAXFLOAT, rec))
     {
-        return 0.5 * Vec3(rec.normal.x()+1, rec.normal.y()+1, rec.normal.z()+1);
+        Vec3 target = rec.p + rec.normal + randomVectorOnUnitSphere();
+        return 0.5 * color( Ray(rec.p, target - rec.p), world);
     }
     Vec3 unit_direction = getUnitVectorOf(r.direction());
     double t = 0.5 * (unit_direction.y() + 1.);
@@ -50,6 +51,7 @@ int main()
                 col = col + color(r, world);
             }
             col = col/ double(ns);
+            col = Vec3(sqrt(col.x()), sqrt(col.y()), sqrt(col.z()));
             int ir = int(255.99*col.x());
             int ig = int(255.99*col.y());
             int ib = int(255.99*col.z());
