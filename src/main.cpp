@@ -2,19 +2,28 @@
 #include<fstream>
 #include "../include/camera.h"
 #include "../include/ray.h"
+#include "../include/material.h"
 #include "../include/sphere.h"
 #include "../include/hitable.h"
 #include "../include/hitable_list.h"
 
 using namespace std;
 
-Vec3 color(const Ray& r, Hitable *world)
+Vec3 color(const Ray& r, Hitable *world, int depth)
 {
     hit_record rec;
     if(world->hit(r, 0.001, MAXFLOAT, rec))
     {
-        Vec3 target = rec.p + rec.normal + randomVectorOnUnitSphere();
-        return 0.5 * color( Ray(rec.p, target - rec.p), world);
+        Ray scattered;
+        Vec3 attenuation;
+        if(depth < 50 && rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+        {
+            return attenuation * color(scattered, world, depth+1);
+        }
+        else
+        {
+            return Vec3(0.,0.,0.);
+        }
     }
     Vec3 unit_direction = getUnitVectorOf(r.direction());
     double t = 0.5 * (unit_direction.y() + 1.);
@@ -30,10 +39,13 @@ int main()
     out.open("image.ppm");
 
 
-    Hitable *list[2];
-    list[0] = new Sphere(Vec3(0.,0.,-1), 0.5);
-    list[1] = new Sphere(Vec3(0., -100.5, -1.), 100);
-    Hitable *world = new Hitable_list(list, 2);
+    int Nobj = 4;
+    Hitable *list[Nobj];
+    list[0] = new Sphere(Vec3(0.,0.,-1), 0.5, new Lambertian(Vec3(0.8, 0.3, 0.3)));
+    list[1] = new Sphere(Vec3(0., -100.5, -1.), 100, new Lambertian(Vec3(0.8,0.8,0.)));
+    list[2] = new Sphere(Vec3(1., 0., -1.), 0.5, new Metal(Vec3(0.8,0.6,0.2), 0.0));
+    list[3] = new Sphere(Vec3(-1., 0., -1.), 0.5, new Metal(Vec3(0.8,0.8,0.8), 0.0));
+    Hitable *world = new Hitable_list(list, Nobj);
     Camera cam;
 
     out << "P3\n" << nx << " " << ny << "\n255\n";
@@ -48,7 +60,7 @@ int main()
                 double v = double(j + drand48())/double(ny);
 
                 Ray r = cam.get_ray(u,v);
-                col = col + color(r, world);
+                col = col + color(r, world, 0);
             }
             col = col/ double(ns);
             col = Vec3(sqrt(col.x()), sqrt(col.y()), sqrt(col.z()));
