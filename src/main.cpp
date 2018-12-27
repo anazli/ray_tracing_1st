@@ -4,6 +4,10 @@
 #include "../include/ray.h"
 #include "../include/material.h"
 #include "../include/sphere.h"
+#include "../include/cylinder.h"
+#include "../include/plane.h"
+#include "../include/disk.h"
+#include "../include/cone.h"
 #include "../include/hitable.h"
 #include "../include/hitable_list.h"
 
@@ -38,27 +42,24 @@ int main()
 {
     int nx = 800;
     int ny = 600;
-    int ns = 50;
+    int ns = 20;
     ofstream out;
     out.open("image.ppm");
 
 
-    int Nobj = 4;
+    int Nobj = 5;
     Hitable *list[Nobj];
-    /*list[0] = new Sphere(Vec3(0.,0.5,1), 0.5, new Dielectric(1.5));
-    list[1] = new Sphere(Vec3(-8.,8.0,-1), 8.0, new Metal(Vec3(0.752, 0.752, 0.752), 0.));
-    //list[2] = new Sphere(Vec3(0., -100.5, -1.), 100, new Lambertian(Vec3(0.8,0.8,0.)));
-    list[2] = new Sphere(Vec3(0., -1000., 0.), 1000, new Lambertian(Vec3(0.2, 0.2, 0.2)));
-    list[3] = new Sphere(Vec3(0., 1.2, -2.), 1.2, new Lambertian(Vec3(0.8, 0.2, 0.2)));
-    //list[2] = new Sphere(Vec3(1., 0., -1.), 0.5, new Metal(Vec3(0.8,0.6,0.2), 0.0));
-    //list[3] = new Sphere(Vec3(-1., 0., -1.), 0.5, new Dielectric(1.5));
-    //list[4] = new Sphere(Vec3(-1., 0., -1.), -0.45, new Dielectric(1.5));
+    list[0] = new Cylinder(Vec3(3.,0.,2), 0.3, 1.0, new Metal(Vec3(0.7,0.7,0.7), 0.));
+    list[1] = new Plane(Vec3(0.,0.,0.), Vec3(0.,1.,0.), new Metal(Vec3(0.5, 0.5, 0.5), 0.));
+    list[2] = new Sphere(Vec3(2., 0.3, -1.), 0.3, new Lambertian(Vec3(0.9, 0.2, 0.2)));
+    list[3] = new Sphere(Vec3(5., 0.3, -1.), 0.3, new Lambertian(Vec3(0.9, 0.2, 0.2)));
+    list[4] = new Disk(Vec3(0.,1.5,0.), 0., 0., 1.5, new Metal(Vec3(0.7,0.7,0.7), 0.));
+    //list[4] = new Cone(Vec3(-2.,0.,-5.), 8., M_PI/6., new Metal(Vec3(0.7,0.7,0.7), 0.));
+
     Hitable *world = new Hitable_list(list, Nobj);
-    */
 
-    Hitable *world = new_random_scene();
 
-    Vec3 lookfrom(17., 12., 0.);
+    Vec3 lookfrom(7., 3., 0.);
     Vec3 lookat(0., 0., -1);
     double dist_to_focus = 30.;
     double aperture = 0.0;
