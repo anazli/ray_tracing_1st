@@ -49,7 +49,8 @@ int main()
 
     int Nobj = 5;
     Hitable *list[Nobj];
-    list[0] = new Cylinder(Vec3(3.,0.,2), 0.3, 1.0, new Metal(Vec3(0.7,0.7,0.7), 0.));
+    //list[0] = new Cylinder(Vec3(0.,0.,-4), 1.3, 1.0, new Metal(Vec3(0.7,0.7,0.7), 0.));
+    list[0] = new Sphere(Vec3(-3.,2.,-4), 2.0, new Metal(Vec3(0.7,0.7,0.7), 0.));
     list[1] = new Plane(Vec3(0.,0.,0.), Vec3(0.,1.,0.), new Metal(Vec3(0.5, 0.5, 0.5), 0.));
     list[2] = new Sphere(Vec3(2., 0.3, -1.), 0.3, new Lambertian(Vec3(0.9, 0.2, 0.2)));
     list[3] = new Sphere(Vec3(5., 0.3, -1.), 0.3, new Lambertian(Vec3(0.9, 0.2, 0.2)));

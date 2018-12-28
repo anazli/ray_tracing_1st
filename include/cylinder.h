@@ -47,11 +47,14 @@ bool Cylinder::hit(const Ray& r, double t_min, double t_max,
                 double intersection = (ymin - r.origin().y())/r.direction().y();
                 if(intersection >= 0)
                 {
-                    rec.t = temp1;
-                    rec.p = r.point_at_parameter(rec.t);
-                    rec.normal = Vec3(0.,-1.,0.);
-                    rec.mat_ptr = mat_ptr;
-                    return true;
+                    if(intersection < t_max && intersection > t_min)
+                    {
+                        rec.t = temp1;
+                        rec.p = r.point_at_parameter(rec.t);
+                        rec.normal = Vec3(0.,-1.,0.);
+                        rec.mat_ptr = mat_ptr;
+                        return true;
+                    }
                 }
             }
             else if(l == ymax)

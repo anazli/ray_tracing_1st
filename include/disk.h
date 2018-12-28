@@ -28,7 +28,15 @@ bool Disk::hit(const Ray& r, double t_min, double t_max,
     double x = cos(phi)*cos(theta);
     double y = cos(phi)*sin(theta);
     double z = sin(phi);
-    Vec3 normal(x,y,z);
+    Vec3 normal1(x,y,z);
+    Vec3 normal2 = -normal1;
+
+    Vec3 normal;
+    if(dot(r.direction(), normal1) < 0)
+        normal = normal1;
+    else if(dot(r.direction(), normal2) < 0)
+        normal = normal2;
+
     double intersection = dot(normal, center - r.origin())/dot(normal, r.direction());
     
     if(intersection >= 0)
