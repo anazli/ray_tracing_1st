@@ -31,92 +31,56 @@ bool Cylinder::hit(const Ray& r, double t_min, double t_max,
     double ymin = center.y();
     double ymax = ymin + height;
     double a = dot(r.direction() * orientation, r.direction());
-    double b = dot(2. * oc * orientation, r.direction());
-    double c = dot(oc * orientation, oc) - radius * radius;
+    double b = 2. * dot(oc * orientation, r.direction());
+    double c = dot(oc * orientation, oc) - radius*radius;
     double discriminant = b*b - 4.*a*c;
     if(discriminant >= 0)
     {
-        double temp1 = (-b - sqrt(discriminant))/a;
-        if(temp1 < t_max && temp1 > t_min)
+        double temp = (-b - sqrt(discriminant))/(2.*a);
+        if(temp < t_max && temp > t_min)
         {
             double l;
-            Vec3 temp_vec = r.point_at_parameter(temp1);
+            Vec3 temp_vec = r.point_at_parameter(temp);
             l = temp_vec.y();
-            if(l == ymin)
+            if(l > ymin && l < ymax)
             {
-                double intersection = (ymin - r.origin().y())/r.direction().y();
-                if(intersection >= 0)
-                {
-                    if(intersection < t_max && intersection > t_min)
-                    {
-                        rec.t = temp1;
-                        rec.p = r.point_at_parameter(rec.t);
-                        rec.normal = Vec3(0.,-1.,0.);
-                        rec.mat_ptr = mat_ptr;
-                        return true;
-                    }
-                }
-            }
-            else if(l == ymax)
-            {
-                double intersection = (ymax - r.origin().y())/r.direction().y();
-                if(intersection >= 0)
-                {
-                    rec.t = temp1;
-                    rec.p = r.point_at_parameter(rec.t);
-                    rec.normal = Vec3(0.,1.,0.);
-                    rec.mat_ptr = mat_ptr;
-                    return true;
-                }
-            }
-            else if(l > ymin && l < ymax)
-            {
-                rec.t = temp1;
-                rec.p = r.point_at_parameter(rec.t);
-                double theta = atan(rec.p.z()/rec.p.x());
-                Vec3 n(cos(theta), 0., sin(theta));
-                rec.normal = n;
+                rec.t = temp;
+                rec.p = temp_vec;
+                Vec3 normal;
+                Vec3 c = center;c.setY(rec.p.y());
+                Vec3 n1 = (rec.p - c)/radius;
+                Vec3 n2(-n1.x(), n1.y(), -n1.z());
+
+                if(dot(r.direction(), n1) < 0)
+                    normal = n1;
+                else if(dot(r.direction(), n2) < 0)
+                    normal = n2;
+
+                rec.normal = normal;
                 rec.mat_ptr = mat_ptr;
                 return true;
             }
         }
-        double temp2 = (-b + sqrt(discriminant))/a;
-        if(temp2 < t_max && temp2 > t_min)
+        temp = (-b + sqrt(discriminant))/(2.*a);
+        if(temp < t_max && temp > t_min)
         {
             double l;
-            Vec3 temp_vec = r.point_at_parameter(temp2);
+            Vec3 temp_vec = r.point_at_parameter(temp);
             l = temp_vec.y();
-            if(l == ymin)
+            if(l > ymin && l < ymax)
             {
-                double intersection = (ymin - r.origin().y())/r.direction().y();
-                if(intersection >= 0)
-                {
-                    rec.t = temp2;
-                    rec.p = r.point_at_parameter(rec.t);
-                    rec.normal = Vec3(0.,-1.,0.);
-                    rec.mat_ptr = mat_ptr;
-                    return true;
-                }
-            }
-            else if(l == ymax)
-            {
-                double intersection = (ymax - r.origin().y())/r.direction().y();
-                if(intersection >= 0)
-                {
-                    rec.t = temp2;
-                    rec.p = r.point_at_parameter(rec.t);
-                    rec.normal = Vec3(0.,1.,0.);
-                    rec.mat_ptr = mat_ptr;
-                    return true;
-                }
-            }
-            else if(l > ymin && l < ymax)
-            {
-                rec.t = temp2;
-                rec.p = r.point_at_parameter(rec.t);
-                double theta = atan(rec.p.z()/rec.p.x());
-                Vec3 n(cos(theta), 0., sin(theta));
-                rec.normal = n;
+                rec.t = temp;
+                rec.p = temp_vec;
+                Vec3 normal;
+                Vec3 c = center;c.setY(rec.p.y());
+                Vec3 n1 = (rec.p - c)/radius;
+                Vec3 n2(-n1.x(), n1.y(), -n1.z());
+                if(dot(r.direction(), n1) < 0)
+                    normal = n1;
+                else if(dot(r.direction(), n2) < 0)
+                    normal = n2;
+
+                rec.normal = normal;
                 rec.mat_ptr = mat_ptr;
                 return true;
             }

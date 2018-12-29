@@ -9,7 +9,7 @@ class Disk : public Hitable {
 
         Disk(){}
         Disk(Vec3 ce, double the, double ph, double r, Material *m) :
-         center(ce), theta(the), phi(ph), radius(r), mat_ptr(m) {}
+         center(ce), theta(the*M_PI/180.), phi(ph*M_PI/180.), radius(r), mat_ptr(m) {}
         
         virtual bool hit(const Ray& r, double t_min, double t_max,
                                                      hit_record& rec) const;

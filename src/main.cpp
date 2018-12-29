@@ -35,37 +35,39 @@ Vec3 color(const Ray& r, Hitable *world, int depth)
     }
     Vec3 unit_direction = getUnitVectorOf(r.direction());
     double t = 0.5 * (unit_direction.y() + 1.);
-    return (1. - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.2, 0.7, 1.0);
+    return (1. - t) * Vec3(0.4, 0.4, 1.0) + t * Vec3(0.2, 0.7, 1.0);
 }
 
 int main()
 {
     int nx = 800;
     int ny = 600;
-    int ns = 20;
+    int ns = 10;
     ofstream out;
     out.open("image.ppm");
 
 
-    int Nobj = 5;
+    int Nobj = 9;
     Hitable *list[Nobj];
-    //list[0] = new Cylinder(Vec3(0.,0.,-4), 1.3, 1.0, new Metal(Vec3(0.7,0.7,0.7), 0.));
-    list[0] = new Sphere(Vec3(-3.,2.,-4), 2.0, new Metal(Vec3(0.7,0.7,0.7), 0.));
-    list[1] = new Plane(Vec3(0.,0.,0.), Vec3(0.,1.,0.), new Metal(Vec3(0.5, 0.5, 0.5), 0.));
-    list[2] = new Sphere(Vec3(2., 0.3, -1.), 0.3, new Lambertian(Vec3(0.9, 0.2, 0.2)));
-    list[3] = new Sphere(Vec3(5., 0.3, -1.), 0.3, new Lambertian(Vec3(0.9, 0.2, 0.2)));
-    list[4] = new Disk(Vec3(0.,1.5,0.), 0., 0., 1.5, new Metal(Vec3(0.7,0.7,0.7), 0.));
-    //list[4] = new Cone(Vec3(-2.,0.,-5.), 8., M_PI/6., new Metal(Vec3(0.7,0.7,0.7), 0.));
+    list[0] = new Cylinder(Vec3(8.,0.,-1), 6., 2.3, new Metal(Vec3(0.7,0.7,0.7), 0.));
+    list[1] = new Cylinder(Vec3(-2.,0.,3), 1., 0.6, new Metal(Vec3(0.9,0.2,0.2), 0.));
+    list[2] = new Sphere(Vec3(-13.,6.,-4), 6.0, new Metal(Vec3(0.7,0.7,0.7), 0.));
+    list[3] = new Plane(Vec3(0.,0.,0.), Vec3(0.,1.,0.), new Lambertian(Vec3(0.5, 0.5, 0.5)));
+    list[4] = new Sphere(Vec3(1., 0.3, 3.), 0.3, new Lambertian(Vec3(0.9, 0.2, 0.2)));
+    list[5] = new Sphere(Vec3(0., 0.3, 5.), 0.3, new Lambertian(Vec3(0.9, 0.2, 0.2)));
+    list[6] = new Disk(Vec3(0.,4.5,-3.), 0., 270., 4.5, new Metal(Vec3(0.25,0.25,0.25), 0.));
+    list[7] = new Cone(Vec3(1.5,0.,4.5), 1.4, 0.4, new Metal(Vec3(0.7,0.7,0.7), 0.));
+    list[8] = new Cone(Vec3(-1.,0.,5.), 2., 0.2, new Metal(Vec3(0.7,0.7,0.7), 0.));
 
     Hitable *world = new Hitable_list(list, Nobj);
 
 
-    Vec3 lookfrom(7., 3., 0.);
-    Vec3 lookat(0., 0., -1);
+    Vec3 lookfrom(0., 1., 7.5);
+    Vec3 lookat(0., 0., 0.);
     double dist_to_focus = 30.;
     double aperture = 0.0;
 
-    Camera cam(lookfrom, lookat, Vec3(0., 1., 0.), 70., double(nx)/double(ny),
+    Camera cam(lookfrom, lookat, Vec3(0., 1., 0.), 90., double(nx)/double(ny),
                                                      aperture, dist_to_focus);
 
     out << "P3\n" << nx << " " << ny << "\n255\n";

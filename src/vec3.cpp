@@ -180,9 +180,7 @@ double Vec3::magnitude()const
 
 Vec3 getUnitVectorOf(const Vec3& v)
 {
-    if(v.magnitude() == 0.)
-        throw "Division by zero!";
-    return v/v.magnitude();
+    return v/(v.magnitude() + 1.E-7);
 }
 
 Vec3 randomVector(const double& a, const double& b)
